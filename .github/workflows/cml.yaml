@@ -10,8 +10,20 @@ jobs:
 #    - uses: iterative/setup-cml@v1
     - name: train model
       run: |
-          pip install --find-links /home/runner/cache --no-index tensorflow==2.12.0
-          python gpudocker.py > report.md
-          cml comment create --publish report.md
+          # pip install --find-links /home/runner/cache --no-index tensorflow==2.12.0
+          # python gpudocker.py > report.md
+          # cml comment create --publish report.md
+          
+          pip install -r requirements.txt
+          python train.py  # generate plot.png#
+          cp plot.png data/plot.png
+          git add data/plot.png
+          echo  '![](/data/plot.png)' > README.md
+          cat metrics.txt >> README.md
+          git config --global user.email "gopinath@test.com"
+          git config --global user.name "gopinath"
+          git add README.md
+          git commit -m "updated readme"
+          git push origin main
       env:
           REPO_TOKEN:  ${{ secrets.GITHUB_TOKEN }}
