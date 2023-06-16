@@ -10,11 +10,8 @@ jobs:
 #    - uses: iterative/setup-cml@v1
     - name: train model
       run: |
-          pip install -r requirements.txt
-          python train.py  # generate plot.png#
-          # Create CML report
-          cat metrics.txt >> report.md
-          # echo '![](./plot.png)' >> report.md
+          pip install --find-links /home/runner/cache --no-index tensorflow==2.12.0
+          python gpudocker.py > report.md
           cml comment create --publish report.md
       env:
           REPO_TOKEN:  ${{ secrets.GITHUB_TOKEN }}
