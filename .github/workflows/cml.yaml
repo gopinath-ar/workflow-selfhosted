@@ -1,0 +1,20 @@
+on: [push]
+
+name: runner-example
+
+jobs:
+  example:
+    runs-on: gpu
+    steps:
+    - uses: actions/checkout@master
+#    - uses: iterative/setup-cml@v1
+    - name: train model
+      run: |
+          pip install -r requirements.txt
+          python train.py  # generate plot.png#
+          # Create CML report
+          cat metrics.txt >> report.md
+          # echo '![](./plot.png)' >> report.md
+          cml comment create --publish report.md
+      env:
+          REPO_TOKEN:  ${{ secrets.GITHUB_TOKEN }}
